@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="theme-color" content="#080b14">
+    <title>{{ nome_assistente }}</title>
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='brand/simbolo.svg') }}">
+    <link rel="preload" href="{{ url_for('static', filename='fonts/gabi-orbit.ttf') }}" as="font" type="font/ttf" crossorigin>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v='orbital-1') }}">
+</head>
+<body data-nome-assistente="{{ nome_assistente }}" data-tema="escuro">
+<div class="container">
+    <header class="header">
+        <div class="identidade"><h1 class="marca"><span class="sr-only">{{ nome_assistente }}</span><img src="{{ url_for('static', filename='brand/chat-gabi.svg') }}" alt="" width="300" height="65"></h1><span class="separador"></span><p>Ideias em movimento.</p></div>
+        <div class="perfil"><span class="avatar" aria-hidden="true">{{ session.usuario[0]|upper }}</span><span>{{ session.usuario }}<small>Seu espaço pessoal</small></span></div>
+    </header>
+    <div class="layout">
+        <main class="card chat-card">
+            <div class="titulo-conversa"><div><span class="selo">UMA CONVERSA. INFINITAS POSSIBILIDADES.</span><h2>Vamos conversar<span class="acento">.</span></h2></div><img class="mini-orbita" src="{{ url_for('static', filename='brand/simbolo.svg') }}" alt="" width="45" height="45"></div>
+            <div id="conversa" class="conversa" role="log" aria-label="Conversa" aria-live="polite">
+                {% for item in historico %}
+                <div id="mensagem-{{ loop.index0 }}" class="mensagem {{ 'usuario' if item.papel == 'usuario' else 'gabi' }}">{{ 'Você: ' if item.papel == 'usuario' else '' }}{{ item.mensagem }}</div>
+                {% else %}
+                <div class="boas-vindas"><div class="welcome-orbit" aria-hidden="true"><img src="{{ url_for('static', filename='brand/simbolo.svg') }}" alt="" width="84" height="84"></div><span class="selo">SEU PRÓXIMO UNIVERSO COMEÇA AQUI</span><h3>Uma ideia pode<br>mudar tudo.</h3><p>Converse, organize seus planos ou explore uma nova possibilidade.</p></div>
+                <div class="mensagem gabi">{{ nome_assistente }}: Olá! Como posso ajudar?</div>
+                {% endfor %}
+            </div>
+            <div class="sugestoes" aria-label="Sugestões para começar"><button type="button" data-sugestao="Me ajude a organizar minha semana.">Organizar a semana <span>↗</span></button><button type="button" data-sugestao="/contas">Minhas contas <span>↗</span></button><button type="button" data-sugestao="Vamos explorar uma ideia nova.">Explorar uma ideia <span>↗</span></button></div>
+            <form id="form-mensagem" class="entrada" data-conversa="{{ conversa or '' }}"><label class="sr-only" for="mensagem">Sua mensagem</label><input type="text" id="mensagem" placeholder="Onde sua ideia vai nos levar?" required autocomplete="off"><button id="enviar" type="submit">Enviar <span aria-hidden="true">↗</span></button></form>
+            <p class="status" id="status" role="status"></p>
+            <div class="chat-rodape"><span>CHAT GABI <i>ORBIT</i></span><span>Um universo de possibilidades.</span></div>
+        </main>
+        <aside class="lateral" aria-label="Histórico e configurações">
+            <section class="card painel-historico">
+                <h2>Conversas</h2>
+                <nav id="historico" class="historico" aria-label="Conversas salvas">
+                    <a href="{{ url_for('index') }}">+ Novo chat</a>
+                    {% for item in conversas %}
+                    <a href="{{ url_for('index', conversa=item.id) }}"{% if item.id == conversa %} aria-current="page"{% endif %}>{{ item.titulo }}</a>
+                    {% else %}
+                    <p>Suas conversas aparecerão aqui.</p>
+                    {% endfor %}
+                </nav>
+            </section>
+            <section class="card configuracoes"><div class="painel-topo"><span class="numero-painel">02</span><span class="selo">DO SEU JEITO</span><span class="icone-painel" aria-hidden="true">⌘</span></div><h2>Configurações</h2><label for="tema">Aparência</label><select id="tema"><option value="escuro" selected>Espacial · escuro</option><option value="claro">Lunar · claro</option></select><label for="tamanho">Tamanho do texto</label><select id="tamanho"><option value="normal">Padrão</option><option value="grande">Grande</option></select><label for="movimento">Animações de fundo</label><select id="movimento"><option value="ligado">Suaves</option><option value="reduzido">Desativadas</option></select><p class="descricao preferencias">Preferências salvas neste navegador.</p><div class="conta"><span>Conectado como <strong>{{ session.usuario }}</strong></span><form method="post" action="{{ url_for('sair') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="secundario" type="submit">Sair da conta <span aria-hidden="true">↗</span></button></form></div></section>
+        </aside>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='script.js', v='conversas-1') }}"></script>
+</body></html>

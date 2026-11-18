@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#080b14"><title>{{ 'Criar conta' if criar else 'Entrar' }} · CHAT GABI</title><link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='brand/simbolo.svg') }}"><link rel="preload" href="{{ url_for('static', filename='fonts/gabi-orbit.ttf') }}" as="font" type="font/ttf" crossorigin><link rel="stylesheet" href="{{ url_for('static', filename='style.css', v='orbital-1') }}"></head>
+<body class="login-body" data-tema="escuro">
+<div class="login-shell">
+    <header class="login-header"><a class="marca" href="{{ url_for('index') }}" aria-label="CHAT GABI, início"><img src="{{ url_for('static', filename='brand/chat-gabi.svg') }}" alt="CHAT GABI" width="280" height="62"></a><span class="login-etiqueta"><span class="luz" aria-hidden="true"></span> UM ESPAÇO SÓ SEU</span></header>
+    <main class="login-layout">
+        <section class="login-hero" aria-labelledby="hero-titulo">
+            <div class="hero-copy"><span class="selo"><span class="linha-acento" aria-hidden="true"></span> INTELIGÊNCIA QUE ORBITA VOCÊ</span><h1 id="hero-titulo">Um novo universo<br>para suas <em>ideias.</em></h1><p>Sua assistente. Seu ritmo. Infinitas possibilidades.<br>Um espaço para pensar além e organizar o agora.</p></div>
+            <div class="orbital-visual" aria-hidden="true"><div class="anel anel-externo"></div><div class="anel anel-interno"></div><div class="orbita-inclinada"></div><div class="planeta"><div class="planeta-brilho"></div><img src="{{ url_for('static', filename='brand/simbolo.svg') }}" alt="" width="104" height="104"></div><span class="estrela estrela-a">✦</span><span class="estrela estrela-b">+</span><span class="satellite"></span><span class="coordenada">GABI / ORBIT</span></div>
+            <div class="hero-base"><span class="mini-linha" aria-hidden="true"></span><span>CONVERSE. EXPLORE. EVOLUA.</span></div>
+        </section>
+        <section class="login card" aria-labelledby="login-titulo">
+            <div class="login-card-topo"><span class="selo">ACESSO PESSOAL</span><img src="{{ url_for('static', filename='brand/simbolo.svg') }}" alt="" width="34" height="34"></div><h2 id="login-titulo">{{ 'Seu universo começa aqui.' if criar else 'De volta à sua órbita.' }}</h2><p class="descricao">{{ 'Crie seu acesso para começar a conversar com o CHAT GABI.' if criar else 'Entre para retomar suas ideias e conversas.' }}</p>
+            {% if erro %}<p class="erro" role="alert">{{ erro }}</p>{% endif %}
+            <form method="post" class="login-form"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><label for="usuario">Usuário</label><input id="usuario" name="usuario" placeholder="Como podemos chamar você?" autocomplete="username" minlength="3" maxlength="60" required autofocus><label for="senha">Senha</label><input id="senha" name="senha" type="password" placeholder="{{ 'Crie sua senha' if criar else 'Sua senha de acesso' }}" autocomplete="{{ 'new-password' if criar else 'current-password' }}" {% if criar %}minlength="10"{% endif %} maxlength="128" required>{% if criar %}<small>Use pelo menos 10 caracteres.</small><label for="confirmacao">Confirme sua senha</label><input id="confirmacao" name="confirmacao" type="password" placeholder="Repita sua senha" autocomplete="new-password" minlength="10" maxlength="128" required>{% endif %}<button type="submit">{{ 'Criar meu acesso' if criar else 'Entrar no meu espaço' }} <span aria-hidden="true">↗</span></button></form>
+            <p>{% if criar %}Já tem conta? <a href="{{ url_for('entrar') }}">Entrar</a>{% else %}Primeira vez aqui? <a href="{{ url_for('primeiro_acesso') }}">Criar conta</a>{% endif %}</p>
+            <div class="rodape-login"><span class="cadeado" aria-hidden="true">◇</span><p>Suas conversas e seu histórico<br>em um espaço protegido por senha.</p></div>
+        </section>
+    </main>
+    <footer class="login-footer"><span>CHAT GABI <i>ORBIT</i></span><span>Seu próximo passo pode ir mais longe.</span><span class="footer-estrela" aria-hidden="true">✦</span></footer>
+</div>
+</body></html>
